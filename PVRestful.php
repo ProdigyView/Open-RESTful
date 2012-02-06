@@ -6,10 +6,13 @@ class PVRestful implements PVResponseInterface, PVRequestInterace {
 	
 	protected $_responseObject;
 	
-	public function __construct($requestObject = null, $responseObject = null) {
+	protected $_authObject;
+	
+	public function __construct($requestObject = null, $responseObject = null, $authObject = null) {
 		
 		$this -> _responseObject = $responseObject;
 		$this -> _requestObject = $requestObject;
+		$this -> _authObject = $authObject;
 	}
 	
 	public function setRequestObject($object) {
@@ -20,13 +23,17 @@ class PVRestful implements PVResponseInterface, PVRequestInterace {
 		$this -> _responseObject = $object;
 	}
 	
-	//Response object required methods
-	
-	public function createResponse($status = 200, $body = '', $content_type = 'text/html') {
-		return $this -> _responseObject -> createResponse($status , $body, $content_type);
+	public function setAuthObject($object) {
+		$this -> _authObject = $object;
 	}
 	
-	public function setStatusMessages(array $messages, array $options = array()) {
+	//Response object required methods
+	
+	public function createResponse($status, $body, $options) {
+		return $this -> _responseObject -> createResponse($status , $body, $options);
+	}
+	
+	public function setStatusMessages($messages,$options = array()) {
 		return $this -> _responseObject -> setStatusMessages($messages, $options);
 	}
 	
@@ -40,12 +47,12 @@ class PVRestful implements PVResponseInterface, PVRequestInterace {
 		return $this -> _requestObject -> processRequest();
 	}
 	
-	public function setRequestData(array $data) {
-		return $this -> _requestObject -> setRequestData();
+	public function setRequestData( $data ) {
+		return $this -> _requestObject -> setRequestData($data);
 	}
 	
 	public function getRequestData($format = '') {
-		return $this -> _requestObject -> getRequestData();
+		return $this -> _requestObject -> getRequestData($format);
 	}
 	
 	public function getRequestMethod() {
