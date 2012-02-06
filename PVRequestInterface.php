@@ -4,7 +4,7 @@ interface PVRequestInterace {
 	
 	public function processRequest();
 	
-	public function setRequestData(array $data);
+	public function setRequestData($data);
 	
 	public function getRequestData($format = '');
 	
