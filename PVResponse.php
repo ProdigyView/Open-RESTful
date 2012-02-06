@@ -12,7 +12,16 @@ class PVResponse implements PVResponseInterface {
 		
 	}
 	
-	public function createResponse($status = 200, $body = '', $content_type = 'text/html') {
+	public function createResponse($status = 200, $body = '', array $options = array()) {
+		
+		$defaults = array(
+			'content_type' => 'text/html',
+			'message' => ''
+		);
+		
+		$options += $defaults;
+		extract($options);
+		
 		$status_header = 'HTTP/1.1 ' . $status . ' ' . $this ->getStatusMessage($status);
 		
 		header($status_header);
@@ -21,24 +30,6 @@ class PVResponse implements PVResponseInterface {
 		if ($body != '') {
 			return $body;
 		} else {
-			
-			$message = $this ->getStatusMessage($status);
-			
-			/*
-			switch($status) {
-				case 401 :
-					$message = 'You must be authorized to view this page.';
-					break;
-				case 404 :
-					$message = 'The requested URL ' . $_SERVER['REQUEST_URI'] . ' was not found.';
-					break;
-				case 500 :
-					$message = 'The server encountered an error processing your request.';
-					break;
-				case 501 :
-					$message = 'The requested method is not implemented.';
-					break;
-			}*/
 
 			$signature = ($_SERVER['SERVER_SIGNATURE'] == '') ? $_SERVER['SERVER_SOFTWARE'] . ' Server at ' . $_SERVER['SERVER_NAME'] . ' Port ' . $_SERVER['SERVER_PORT'] : $_SERVER['SERVER_SIGNATURE'];
 
