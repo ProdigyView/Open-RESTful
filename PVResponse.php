@@ -46,10 +46,10 @@ class PVResponse implements PVResponseInterface {
 						<html>
 							<head>
 								<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-								<title>' . $status . ' ' . RestUtils::getStatusCodeMessage($status) . '</title>
+								<title>' . $status . ' ' . self::getStatusMessage($status) . '</title>
 							</head>
 							<body>
-								<h1>' . RestUtils::getStatusCodeMessage($status) . '</h1>
+								<h1>' . self::getStatusMessage($status) . '</h1>
 								<p>' . $message . '</p>
 								<hr />
 								<address>' . $signature . '</address>
