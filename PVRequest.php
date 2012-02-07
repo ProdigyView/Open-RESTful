@@ -1,6 +1,6 @@
 <?php
 
-class PVRequest implements PVRequestInterace {
+class PVRequest implements PVRequestInterface {
 	
 	protected $_request_data;
 	
@@ -16,11 +16,13 @@ class PVRequest implements PVRequestInterace {
 			'http_accept' =>  (strpos($_SERVER['HTTP_ACCEPT'], 'json')) ? 'json' : 'xml'
 			);
 		
+		$options += $defaults;
+		
 		$this -> _request_data = array();
 		
 		$this -> _request_method = $options['request_method'];
 		
-		$this ->$_http_reques = $options['http_accept'];
+		$this -> _http_request = $options['http_accept'];
 		
 		if($options['process_request']) {
 			$this -> processRequest();
@@ -32,7 +34,7 @@ class PVRequest implements PVRequestInterace {
 	public function processRequest() {
 
 		$this -> _request_method = strtolower($_SERVER['REQUEST_METHOD']);
-
+		
 		switch ($this -> _request_method) {
 
 			case 'get' :
@@ -49,7 +51,7 @@ class PVRequest implements PVRequestInterace {
 
 	}
 	
-	public function setRequestData(array $data) {
+	public function setRequestData($data) {
 		$this ->_request_data = $data;
 	}
 	
