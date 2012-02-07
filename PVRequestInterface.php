@@ -1,6 +1,6 @@
 <?php
 
-interface PVRequestInterace {
+interface PVRequestInterface {
 	
 	public function processRequest();
 	
@@ -12,3 +12,4 @@ interface PVRequestInterace {
 	
 	public function setRequestMethod($method);
 }
+

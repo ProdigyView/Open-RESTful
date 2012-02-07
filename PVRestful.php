@@ -1,6 +1,6 @@
 <?php
 
-class PVRestful implements PVResponseInterface, PVRequestInterace {
+class PVRestful implements PVResponseInterface, PVRequestInterface {
 	
 	protected $_requestObject;
 	

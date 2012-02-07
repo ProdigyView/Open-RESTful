@@ -12,7 +12,7 @@ class PVResponse implements PVResponseInterface {
 		
 	}
 	
-	public function createResponse($status = 200, $body = '', array $options = array()) {
+	public function createResponse($status, $body = '', $options = array()) {
 		
 		$defaults = array(
 			'content_type' => 'text/html',
@@ -51,7 +51,7 @@ class PVResponse implements PVResponseInterface {
 		}
 	}
 	
-	public function setStatusMessages(array $messages, array $options = array()) {
+	public function setStatusMessages($messages, $options = array()) {
 			
 		$defaults = array('use_message_defaults' => true);
 		$options += $defaults;
