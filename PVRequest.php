@@ -8,12 +8,18 @@ class PVRequest implements PVRequestInterface {
 
 	protected $_http_request;
 	
+	protected $_request_method;
+	
+	protected $_mobile_devices;
+	
 	public function __construct($data = null, array $options = array()) {
 		
 		$defaults = array(
 			'process_request' => true,
 			'request_method' => '',
-			'http_accept' =>  (strpos($_SERVER['HTTP_ACCEPT'], 'json')) ? 'json' : 'xml'
+			'http_accept' =>  (strpos($_SERVER['HTTP_ACCEPT'], 'json')) ? 'json' : 'xml',
+			'request_method' => 'REQUEST_METHOD',
+			'mobile_devices' => "/(nokia|iphone|android|motorola|^mot-|softbank|foma|docomo|kddi|up.browser|up.link|htc|dopod|blazer|netfront|helio|hosin|huawei|novarra|CoolPad|webos|techfaith|palmsource|blackberry|alcatel|amoi|ktouch|nexian|samsung|^sam-|s[cg]h|^lge|ericsson|philips|sagem|wellcom|bunjalloo|maui|symbian|smartphone|midp|wap|phone|windows ce|iemobile|^spice|^bird|^zte-|longcos|pantech|gionee|^sie-|portalmmm|jigs browser|hiptop|^ucweb|^benq|haier|^lct|operas*mobi|opera*mini|320x320|240x320|176x220)/i"		
 			);
 		
 		$options += $defaults;
@@ -24,6 +30,10 @@ class PVRequest implements PVRequestInterface {
 		
 		$this -> _http_request = $options['http_accept'];
 		
+		$this -> _request_method = $options['request_method'];
+		
+		$this -> _mobile_devices = $options['mobile_devices'];
+		
 		if($options['process_request']) {
 			$this -> processRequest();
 		}
@@ -31,9 +41,18 @@ class PVRequest implements PVRequestInterface {
 		return $this;
 	}
 	
+	/**
+	 * Process the request by breaking down the variables and adding it to the protected variable
+	 * $_request_data. This method is ran automatically by the constructor but can be dispable in the
+	 * constructor. If it is disabled, it should be ran before using other methods of this class.
+	 * 
+	 * @return void
+	 * @access public
+	 * @todo make ability to handle 'head', 'delete' and 'continue'
+	 */
 	public function processRequest() {
 
-		$this -> _request_method = strtolower($_SERVER['REQUEST_METHOD']);
+		$this -> _request_method = strtolower($_SERVER[$this -> _request_method]);
 		
 		switch ($this -> _request_method) {
 
@@ -51,10 +70,27 @@ class PVRequest implements PVRequestInterface {
 
 	}
 	
+	/**
+	 * Sets the data that will act as the data for a request.
+	 * 
+	 * @param array $data Data to set as the request
+	 * 
+	 * @return void
+	 * @access public
+	 */
 	public function setRequestData($data) {
 		$this ->_request_data = $data;
 	}
 	
+	/**
+	 * Returns the request data. The data can be return in certain formats if neccesary.
+	 * 
+	 * @param string $format The default format will return the data as set in the class. If set to json, the data will be return in a json format
+	 * 
+	 * @return mixed $data The data return in a certain format
+	 * @access public
+	 * @todo add ability to format data in xml and to serialize
+	 */
 	public function getRequestData($format = '') {
 		
 		switch ($format) {
@@ -69,11 +105,43 @@ class PVRequest implements PVRequestInterface {
 		return $data;
 	}
 	
+	/**
+	 * Returns the request method, where it is get, put, post or another form.
+	 * 
+	 * @return string $method The method that was sent in a header
+	 * @access public
+	 */
 	public function getRequestMethod() {
 		return $this ->_request_method;
 	}
 	
+	/**
+	 * Sets the request method to a certain type.
+	 * 
+	 * @param string $method The method to set as the request method
+	 * 
+	 * @return void
+	 * @access public
+	 */
 	public function setRequestMethod($method) {
 		$this -> _request_method = $method;
+	}
+	
+	/**
+	 * Returns a boolean that determines if the request was made by a mobile device.
+	 * 
+	 * @return boolean $ismobile Returns true if the device is mobile, otherwise false
+	 * @access public
+	 */
+	public function isMobile(){
+		
+		return (isset($_SERVER['HTTP_X_WAP_PROFILE']) || isset($_SERVER['HTTP_PROFILE']) || preg_match($this -> _mobile_devices, strtolower($_SERVER['HTTP_USER_AGENT'])));
+	}
+	
+	/**
+	 * 
+	 */
+	public function getMobileDevice() {
+		
 	}
 }
