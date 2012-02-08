@@ -11,7 +11,19 @@ class PVResponse implements PVResponseInterface {
 		return $this;
 		
 	}
-	
+	/**
+	 * Creates an html response to display to the. The response can be override by setting the body
+	 * to a value other than an empty string.
+	 * 
+	 * @param int $status The status is the status code that will be sent as a header
+	 * @param string $body The body of that will be displayed to the user. If no body is set, a default html template will be display with the status code
+	 * @param array $options An array of options that define how content will be displayed
+	 * 			-'content_type' _string_: The type of content that will be displayed. Default is text/html
+	 * 			-'message' _string_: A message that can be displayed us no body is set. Default is empty string.
+	 * 
+	 * @return string $response A response generated based on the variables
+	 * @access public
+	 */
 	public function createResponse($status, $body = '', $options = array()) {
 		
 		$defaults = array(
@@ -51,6 +63,17 @@ class PVResponse implements PVResponseInterface {
 		}
 	}
 	
+	/**
+	 * Set message to be used. This will ovveride the default ones that are currently
+	 * being used.
+	 * 
+	 * @param array $messages An array that the key is the interger that is a status and the value the description of the code
+	 * @param array $options An array that can be used to define how the status codes are added
+	 * 			-'use_message_defaults' _boolean_: Default is true and if set to true, will be the status codes that come with the class
+	 * 
+	 * @return void
+	 * @access public
+	 */
 	public function setStatusMessages($messages, $options = array()) {
 			
 		$defaults = array('use_message_defaults' => true);
@@ -62,11 +85,25 @@ class PVResponse implements PVResponseInterface {
 		$this -> _statusMessages = $messages;
 	}
 	
+	/**
+	 * Returns the message to a status based on the code that is passed.
+	 * 
+	 * @param int $status An interger value representing the status code
+	 * 
+	 * @return string $message Returns a message if found, otherwise returns false
+	 * @access public
+	 */
 	public function getStatusMessage($status) {
 		
 		return (isset($this -> _statusMessages[$status])) ? $this -> _statusMessages[$status] : '';
 	}
 	
+	/**
+	 * Get the default status messages associated with a status.
+	 * 
+	 * @return array $messages Return an array in wich the key is the status and the value is a message
+	 * @access public
+	 */
 	protected static function getDefaultStatusMessages() {
 		
 		$status = Array(
