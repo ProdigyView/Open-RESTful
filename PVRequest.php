@@ -12,6 +12,12 @@ class PVRequest implements PVRequestInterface {
 	
 	protected $_mobile_devices;
 	
+	/**
+	 * Set up the default variables for the Request class.
+	 * 
+	 * @param $mixed $data Currently not used but can be data of any sort
+	 * @param array $options An array of options that can be used to customize the class.
+	 */
 	public function __construct($data = null, array $options = array()) {
 		
 		$defaults = array(
@@ -139,9 +145,30 @@ class PVRequest implements PVRequestInterface {
 	}
 	
 	/**
+	 * Returns the mobile device that is currently being used
 	 * 
+	 * @return mixed $device Returns the mobile device and if none, returns false
+	 * @access public
 	 */
 	public function getMobileDevice() {
+			
+		preg_match($this -> _mobile_devices, strtolower($_SERVER['HTTP_USER_AGENT']), $matches);
+		
+		return (isset($matches[0]) && !empty($matches[0])) ? $matches[0] : false;
+	}
+	
+	/**
+	 * Determines if the request is an ajax request.
+	 * 
+	 * @return boolean $isAjax Returns true if the request is ajax, otherwise false
+	 * @access public
+	 */
+	public function isAjaxRequest() {
+		
+		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+			return true;
+		
+		return false;
 		
 	}
 }
