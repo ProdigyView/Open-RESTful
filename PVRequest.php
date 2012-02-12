@@ -72,6 +72,16 @@ class PVRequest implements PVRequestInterface {
 				parse_str(file_get_contents('php://input'), $vars);
 				$this -> _request_data = $vars;
 				break;
+			case 'delete' :
+				parse_str(file_get_contents('php://input'), $vars);
+				$this -> _request_data = $vars;
+				break;
+			case 'head' :
+				echo 'Run around like a chicken with it\'s head cut off';
+				break;
+			case 'continue' :
+				echo 'Run around like a chicken with it\'s head cut off';
+				break;
 		}
 
 	}
